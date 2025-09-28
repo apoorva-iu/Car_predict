@@ -1,52 +1,53 @@
-Used Car Price Predictor 🚗
+Car Price Predictor 🚗
 
-This project is a web application that predicts the selling price of used cars using a machine learning model deployed with Flask.
+This is a web application that predicts the resale price of a used car. The project utilizes a Flask backend to serve predictions from a machine learning model and a dynamic frontend built with HTML/JavaScript for user interaction.
 
-🚀 Key Features
-Interactive Web Form: Users input key car features (Company, Model, Year, Kms Driven, Fuel Type).
-
-Dynamic UI: Car Models are dynamically filtered based on the selected Company using JavaScript.
-
-ML Prediction: Price estimation is powered by a pre-trained regression model.
-
-Project Structure
+📂 Project Structure
 File/Folder	Purpose
-app.py	Flask App: Core application logic, routing, and model serving.
-templates/	Frontend: Contains index.html (the prediction form).
-static/	Web Assets: Contains css/ for styling.
-model.joblib	Prediction Model: The primary trained model file used by app.py.
-LinearRegressionModel.pkl	Alternative format for the trained model.
-Quikr Analysis.ipynb	Analysis: Jupyter Notebook detailing EDA, feature engineering, and model training.
-quikr_car.csv	Raw Data: The original, uncleaned dataset.
-Cleaned Car.csv	Cleaned Data: The processed dataset used for model training.
-requirements.txt	Dependencies: Lists all necessary Python packages (Flask, scikit-learn, etc.).
+app.py	Flask Application: Core logic for routing, model loading, and handling price prediction requests.
+templates/	Frontend: Contains index.html, the main prediction form.
+static/	Web Assets: Contains css/ for all project styling.
+model.joblib	Trained Model: The primary saved machine learning regression model.
+Quikr Analysis.ipynb	Analysis: Jupyter Notebook documenting the entire process: EDA, cleaning, feature engineering, and model training.
+requirements.txt	Lists all necessary Python dependencies (Flask, scikit-learn, pandas, etc.).
 
-Setup and Installation
+Export to Sheets
+⚙️ Setup and Installation
 1. Clone the Repository
-Clone your project using your GitHub URL and navigate into the project folder (car_predict):
+Clone your project from GitHub and navigate into the main project folder (car_predict):
+
+Bash
 
 git clone https://github.com/apoorva-iu/car_predict
-cd car_predict
+cd car_predict 
+2. Configure Environment (Recommended)
+It's best practice to use a virtual environment to isolate project dependencies:
 
-Configure Environment
-Create and activate a Python virtual environment:
+Bash
 
+# Create and activate the environment
 python3 -m venv venv
-source venv/bin/activate  # macOS/Linux
-# venv\Scripts\activate   # Windows
+source venv/bin/activate  # Use 'venv\Scripts\activate' on Windows
+3. Install Dependencies
+Install all required Python packages:
 
-Install Dependencies
-Install all necessary packages:
+Bash
 
 pip install -r requirements.txt
+▶️ How to Run the Application
+Ensure your virtual environment is active (if you used one).
 
-How to Run
-Ensure your virtual environment is active.
+Run the Flask application:
 
-Run the Flask application from within the car_predict folder:
+Bash
 
 python app.py
-
-Open your web browser and navigate to the local server address:
+The application will be available at:
 
 http://127.0.0.1:5000/
+
+
+
+
+
+
