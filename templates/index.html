@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Car Price Predictor</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+  body { display: flex; justify-content: center; align-items: center; min-height: 100vh; transition: background-color 0.3s, color 0.3s; }
+  .card { width: 100%; max-width: 500px; padding: 1.5rem; border-radius: 12px; }
+  .form-label { font-weight: 500; }
+  .mt-2 { margin-top: 0.5rem !important; }
+  .display-6 { font-size: 1.75rem; }
+  body.dark-mode { background-color: #121212; color: #f0f0f0; }
+  body.dark-mode .card { background-color: #1e1e1e; color: #f0f0f0; }
+  @media (max-width: 576px) { .card { padding: 1rem; } }
+</style>
+</head>
+<body>
+
+<div class="card shadow-sm">
+<h4 class="text-center mb-3">Car Price Predictor</h4>
+
+<div class="form-check form-switch mb-3">
+  <input class="form-check-input" type="checkbox" id="darkModeToggle">
+  <label class="form-check-label" for="darkModeToggle">Dark Mode</label>
+</div>
+
+<form id="predict-form" autocomplete="off">
+  <div class="mb-2">
+    <label class="form-label">Company</label>
+    <select class="form-select" name="company" id="company" required>
+      <option value="" selected disabled>Select Company</option>
+      {% for c in companies %}<option value="{{ c }}">{{ c }}</option>{% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-2">
+    <label class="form-label">Model</label>
+    <select class="form-select" name="name" id="model" required>
+      <option value="" selected disabled>Select Model</option>
+    </select>
+  </div>
+
+  <div class="mb-2">
+    <label class="form-label">Year</label>
+    <select class="form-select" name="year" required>
+      <option value="" selected disabled>Select Year</option>
+      {% for y in years %}<option value="{{ y }}">{{ y }}</option>{% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-2">
+    <label class="form-label">Fuel Type</label>
+    <select class="form-select" name="fuel_type" required>
+      <option value="" selected disabled>Select Fuel</option>
+      {% for f in fuels %}<option value="{{ f }}">{{ f }}</option>{% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-2">
+    <label class="form-label">Kms Driven</label>
+    <input type="number" step="1" min="0" class="form-control" name="kms_driven" placeholder="e.g., 45000" required>
+  </div>
+
+  <button type="submit" class="btn btn-primary w-100 mt-2">Predict</button>
+</form>
+
+<div id="result" class="text-center mt-3" style="display:none;">
+  <h5>Predicted Price</h5>
+  <p id="price" class="display-6 text-success"></p>
+</div>
+</div>
+
+<script>
+const companySelect = document.getElementById('company');
+const modelSelect = document.getElementById('model');
+const form = document.getElementById('predict-form');
+const resultBox = document.getElementById('result');
+const priceEl = document.getElementById('price');
+const darkModeToggle = document.getElementById('darkModeToggle');
+
+// Dark mode toggle
+darkModeToggle.addEventListener('change', () => {
+    document.body.classList.toggle('dark-mode', darkModeToggle.checked);
+});
+
+// Populate models based on selected company
+companySelect.addEventListener('change', async () => {
+    const company = encodeURIComponent(companySelect.value);
+    modelSelect.innerHTML = '<option selected disabled>Loading models...</option>';
+    try {
+        const res = await fetch(`/get_models/${company}`);
+        if (!res.ok) throw new Error('Failed to fetch models');
+        const models = await res.json();
+        modelSelect.innerHTML = '<option selected disabled>Select Model</option>';
+        if (models.length === 0) {
+            const opt = document.createElement('option');
+            opt.textContent = 'No models available';
+            opt.disabled = true;
+            modelSelect.appendChild(opt);
+        } else {
+            models.forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m;
+                opt.textContent = m;
+                modelSelect.appendChild(opt);
+            });
+        }
+    } catch (err) {
+        modelSelect.innerHTML = '<option selected disabled>Error loading models</option>';
+        console.error(err);
+    }
+});
+
+// Animate predicted price
+function animatePrice(target) {
+    let current = 0;
+    const step = Math.max(1, Math.floor(target / 100));
+    const interval = setInterval(() => {
+        current += step;
+        if(current >= target) { current = target; clearInterval(interval); }
+        priceEl.innerText = `₹ ${current.toLocaleString()}`;
+    }, 10);
+}
+
+// Form submit
+form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const payload = new URLSearchParams();
+    for (const pair of formData) payload.append(pair[0], pair[1]);
+    const res = await fetch('/predict', { method: 'POST', body: payload });
+    const data = await res.json();
+    if (data.success) animatePrice(data.predicted_price);
+    else priceEl.innerText = 'Error: ' + (data.error || 'Try again');
+    resultBox.style.display = 'block';
+});
+</script>
+</body>
+</html>
