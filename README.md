@@ -1,9 +1,3 @@
-I understand. The username you've used for your repository on GitHub is apoorva-iu.
-
-When you write the README.md file, you should use your actual GitHub repository URL in the installation steps.
-
-Here is the final, ready-to-use README.md content, using car_predict as your project folder name and assuming your repository link will follow the format: https://github.com/apoorva-iu/car_predict.
-
 Used Car Price Predictor 🚗
 This project is a web application that predicts the selling price of used cars using a machine learning model deployed with Flask.
 
@@ -14,7 +8,7 @@ Dynamic UI: Car Models are dynamically filtered based on the selected Company us
 
 ML Prediction: Price estimation is powered by a pre-trained regression model.
 
-📂 Project Structure
+Project Structure
 File/Folder	Purpose
 app.py	Flask App: Core application logic, routing, and model serving.
 templates/	Frontend: Contains index.html (the prediction form).
@@ -26,8 +20,7 @@ quikr_car.csv	Raw Data: The original, uncleaned dataset.
 Cleaned Car.csv	Cleaned Data: The processed dataset used for model training.
 requirements.txt	Dependencies: Lists all necessary Python packages (Flask, scikit-learn, etc.).
 
-Export to Sheets
-⚙️ Setup and Installation
+Setup and Installation
 1. Clone the Repository
 Clone your project using your GitHub URL and navigate into the project folder (car_predict):
 
@@ -46,6 +39,7 @@ Install all necessary packages:
 
 pip install -r requirements.txt
 
+How to Run
 Ensure your virtual environment is active.
 
 Run the Flask application from within the car_predict folder:
